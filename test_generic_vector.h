@@ -1,6 +1,3 @@
-//
-// Created by shoam on 9/12/19.
-//
 
 #ifndef C_GENERIC_VECTOR_SHOAMCO_TEST_GENERIC_VECTOR_H
 #define C_GENERIC_VECTOR_SHOAMCO_TEST_GENERIC_VECTOR_H
@@ -16,4 +13,4 @@ void test_SetElement();
 void test_Remove();
 void test_Pop();
 void test_ErrorCode();
-#endif //C_GENERIC_VECTOR_SHOAMCO_TEST_GENERIC_VECTOR_H
+#endif /*C_GENERIC_VECTOR_SHOAMCO_TEST_GENERIC_VECTOR_H*/
