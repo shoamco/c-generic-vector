@@ -10,7 +10,8 @@ OBJS=$(SOURCES:.c=.o)
 
 INC_FLAGS=-I../include
 CC=gcc
-#flags
+
+
 #CFLAGS=-pedantic -Wall -Werror -Wconversion -ansi -g $(INC_FLAGS)
 #CFLAGS=-pedantic -Wall -Wconversion -ansi -g $(INC_FLAGS)
 CFLAGS=-std=gnu90 -Wall -pedantic -Wconversion -Wconversion -ansi -g $(INC_FLAGS)-D_DEBUG=m
@@ -24,9 +25,7 @@ $(TARGET): $(OBJS)
 include .depends
 
 # create a hidden file named .depends using a redirection with all include
-#Instead
-#inter.o: funcs.h
-#main.o: defs.h funcs.h
+
 
 .depends:
 	$(CC) -MM -I$(INC_DIR) $(SOURCES) > .depends

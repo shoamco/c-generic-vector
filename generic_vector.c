@@ -3,12 +3,9 @@
 
 struct Vector {
     void **m_array_items;/*array of void*-generic items*/
-    char **m_array_items_type;/*array that holds the types of items*/
     size_t m_capacity;
     size_t m_number_items;
 };
-
-
 
 
 Vector *vectorCreate(size_t size) {
@@ -18,10 +15,10 @@ Vector *vectorCreate(size_t size) {
         d_vector->m_capacity = size;
         d_vector->m_number_items = 0;
         d_vector->m_array_items = malloc(size * sizeof(void **));
-        d_vector->m_array_items_type = malloc(size * sizeof(char **));
+
         assert(d_vector->m_array_items);
-       /* if (!d_vector->m_array_items) {*/
-        if (!d_vector->m_array_items && !d_vector->m_array_items_type ) {
+        /* if (!d_vector->m_array_items) {*/
+        if (!d_vector->m_array_items ) {
 
             free(d_vector);/*if allocation fall -free vector */
             d_vector = NULL;/*return null for the use*/
@@ -42,32 +39,34 @@ void vectorDestroy(Vector **vector) {
 }
 
 void resize_vector_by2(Vector *vector) {
-    vector->m_capacity *= 2;
     void **temp = vector->m_array_items;
-    vector->m_array_items = realloc(vector->m_array_items, vector->m_capacity * sizeof(void*));
+
+    vector->m_capacity *= 2;
+    vector->m_array_items = realloc(vector->m_array_items, vector->m_capacity * sizeof(void *));
     if (!(vector->m_array_items)) /*If the allocation failed -return the items*/
         vector->m_array_items = temp;
 }
-void shift_right(Vector *vector, int index) {
-    int i, size = vector->m_number_items;
+
+void shift_right(Vector *vector, size_t index) {
+    size_t size = vector->m_number_items, i = size + 1;
 
 
-    for (i = size + 1; i > index; --i) {
+    for (; i > index; --i) {
         vector->m_array_items[i] = vector->m_array_items[i - 1];
 
     }
 }
 
-void shift_left(Vector *vector, int index) {
-    int i, size = vector->m_number_items;
+void shift_left(Vector *vector, size_t index) {
+    size_t size = vector->m_number_items, i = index;
 
-    for (i = index; i < size; ++i) {
+    for (; i < size; ++i) {
         vector->m_array_items[i] = vector->m_array_items[i + 1];
 
     }
 }
 
-void shift(Vector *vector, int index, Direction direction) {
+void shift(Vector *vector, size_t index, Direction direction) {
     if (direction == RIGHT) {
         shift_right(vector, index);
     } else {
@@ -75,6 +74,7 @@ void shift(Vector *vector, int index, Direction direction) {
 
     }
 }
+
 /* Adds an item at the end. Grows if needed (by * 2) */
 ErrorCode vectorPush(Vector *vector, void *value) {
 /*ErrorCode vectorPush(Vector *vector, void *value, char *type) {*/
@@ -97,7 +97,9 @@ ErrorCode vectorInsert(Vector *vector, void *value, size_t index) {
 
     if (index > vector->m_number_items)
         val_error = E_BAD_INDEX;
-
+    else if (index == (vector->m_number_items)-1) {
+        vectorPush(vector, value);
+    }
     else {
 
         if (vector->m_number_items >= vector->m_capacity) {
@@ -124,7 +126,7 @@ ErrorCode vectorPop(Vector *vector, void **res) {
     if (vector->m_number_items == 0) {
         val_error = E_UNDERFLOW;
     } else {
-        vectorPrint(vector);
+
         *res = vector->m_array_items[(vector->m_number_items) - 1];
 
         vector->m_array_items[--(vector->m_number_items)] = 0;
@@ -137,7 +139,6 @@ ErrorCode vectorPop(Vector *vector, void **res) {
 
 /* Clears an item at a certain position and shifts. */
 ErrorCode vectorRemove(Vector *vector, size_t index, void **res) {
-    int i;
     ErrorCode val_error = E_OK;
     assert(vector);
     if (!vector)
@@ -156,8 +157,8 @@ ErrorCode vectorRemove(Vector *vector, size_t index, void **res) {
     return val_error;
 }
 
-ErrorCode vectorGetElement(const Vector *vector, size_t index, void *res) {
-    ErrorCode val_error =E_OK;
+ErrorCode vectorGetElement(const Vector *vector, size_t index, void **res) {
+    ErrorCode val_error = E_OK;
     if (!vector)
         val_error = E_NULL_PTR;
 
@@ -165,7 +166,7 @@ ErrorCode vectorGetElement(const Vector *vector, size_t index, void *res) {
         val_error = E_BAD_INDEX;
 
     else {
-        res = vector->m_array_items[index];
+        *res = vector->m_array_items[index];
     }
     return val_error;
 }
@@ -175,7 +176,7 @@ ErrorCode vectorSetElement(Vector *vector, size_t index, void *value) {
     if (!vector)
         val_error = E_NULL_PTR;
 
-    else if (index < 0 || index > vector->m_number_items)
+    else if (index > vector->m_number_items)
         val_error = E_BAD_INDEX;
 
     else {
@@ -196,7 +197,6 @@ size_t vectorGetCapacity(const Vector *vector) {
 }
 
 
-
 /* Counts how many instances of a given value there are. */
 size_t vectorCount(const Vector *vector, void *value) {/*todo:type*/
     int i = 0;
@@ -210,6 +210,29 @@ size_t vectorCount(const Vector *vector, void *value) {/*todo:type*/
     return count;
 }
 
-void vectorPrint(const Vector *vector) {
+void vectorPrint(Vector *vector, Func func) {
+    func(vector);
 
+
+}
+
+void print_int(Vector *vector) {
+    int i = 0;
+    for (; i < vector->m_number_items; ++i)
+        printf("%d ", *(int *) vector->m_array_items[i]);
+    printf("\n");
+}
+
+void print_char(Vector *vector) {
+    int i = 0;
+    for (; i < vector->m_number_items; ++i)
+        printf("%c ", *(char *) vector->m_array_items[i]);
+    printf("\n");
+}
+
+void print_float(Vector *vector) {
+    int i = 0;
+    for (; i < vector->m_number_items; ++i)
+        printf("%f ", *(float *) vector->m_array_items[i]);
+    printf("\n");
 }
