@@ -2,7 +2,7 @@
 
 #include "test_generic_vector.h"
 
-void print_all_details(Vector *vector, char message[], Func func) {
+void print_all_details(Vector *vector, char message[], FuncPrint func) {
 
     printf("%s  :size: %ld , capacity: %ld  \n", message, vectorGetSize(vector), vectorGetCapacity(vector));
     vectorPrint(vector, func);
@@ -17,7 +17,7 @@ void test_vector_create() {
 void test_push() {
     Vector *vector = vectorCreate(3);
     int v1 = 1, v2 = 2, v3 = 3, v4 = 4;
-    Func func = &print_int;
+    FuncPrint func = &print_int;
     void *item1 = &v1, *item2 = &v2, *item3 = &v3, *item4 = &v4;
 
     printf("\n***********   test push  ***********\n");
@@ -62,7 +62,7 @@ void test_GetSize() {
 void test_insert() {
     Vector *vector = vectorCreate(2);
     char v1 = 'a', v2 = 'b', v3 = 'c', v4 = 'd';
-    Func func = &print_char;
+    FuncPrint func = &print_char;
     void *item1 = &v1, *item2 = &v2, *item3 = &v3, *item4 = &v4;
 
 
@@ -106,39 +106,97 @@ void test_GetCapacity() {
 
 }
 
-/*
+
 void test_Count() {
-    Vector *vector = vectorCreate(3);
-    int v1 = 1;
-    float v2 = 5.5;
-    char v3 = 'a';
-    char v4[] = "generic vector";
-    void *item1 = &v1, *item2 = &v2, *item3 = &v3, *item4 = &v4;
+    Vector *vector_char = vectorCreate(4);
+    Vector *vector_string = vectorCreate(4);
+    Vector *vector_int = vectorCreate(4);
+    char v1 = 'a', v2 = 'b', v3 = 'c', v4 = 'd', v5 = 'f';
+    int int1 = 1, int2 = 3, int3 = 3, int4 = 4, int5 = 5;
+    char *s1 = "aaa", *s2 = "bbb", *s3 = "ccc", *s4 = "ddd", *s5 = "fff";
+    FuncPrint func_print_char = &print_char, func_print_str = &print_string, func_print_int = &print_int;
+
+    FuncCompare func_compare_char = &compare_char, func_compare_str = &compare_string, func_compare_int = &compare_int;
+
+    void *item1 = &v1, *item2 = &v2, *item3 = &v3, *item4 = &v4, *item5 = &v5;
+    void *item_str1 = &s1, *item_str2 = &s2, *item_str3 = &s3, *item_str4 = &s4, *item_str5 = &s5;
+    void *item_int1 = &int1, *item_int2 = &int2, *item_int3 = &int3, *item_int4 = &int4, *item_int5 = &int5;
 
     printf("\n***********   test Count  ***********\n");
+/*push items char to vector_char*/
+    vectorPush(vector_char, item1);
+    vectorPush(vector_char, item2);
+    vectorPush(vector_char, item3);
+    vectorPush(vector_char, item4);
+    vectorPush(vector_char, item1);
+    vectorPush(vector_char, item1);
 
-    vectorPush(vector, item1);
-    vectorPush(vector, item2);
-    vectorPush(vector, item3);
-    vectorPush(vector, item4);
-    vectorPush(vector, item1);
-    vectorPush(vector, item1);
+/*push items str to vector_str*/
+    vectorPush(vector_string, item_str1);
+    vectorPush(vector_string, item_str2);
+    vectorPush(vector_string, item_str2);
+    vectorPush(vector_string, item_str3);
+    vectorPush(vector_string, item_str4);
+    vectorPush(vector_string, item_str1);
 
-    print_all_details(vector, "vector");
+    /*push items str to vector_str*/
+    vectorPush(vector_string, item_str1);
+    vectorPush(vector_string, item_str2);
+    vectorPush(vector_string, item_str2);
+    vectorPush(vector_string, item_str3);
+    vectorPush(vector_string, item_str4);
+    vectorPush(vector_string, item_str1);
+
+    /*push items int to vector_int*/
+     vectorPush(vector_int, item_int1);
+       vectorPush(vector_int, item_int2);
+       vectorPush(vector_int, item_int4);
+       vectorPush(vector_int, item_int3);
+       vectorPush(vector_int, item_int1);
+       vectorPush(vector_int, item_int1);
+
+       print_all_details(vector_char, "vector char:", func_print_char);
 
 
-    printf("count item1: %ld \n", vectorCount(vector, item1));
-    printf("count item4: %ld\n ", vectorCount(vector, item4));
-    vectorDestroy(&vector);
+       printf("count,%c appears %ld times \n", *(char *) item1, vectorCount(vector_char, item1, func_compare_char));
+       printf("count,%c appears %ld times \n", *(char *) item4, vectorCount(vector_char, item4, func_compare_char));
+       printf("count,%c appears %ld times \n", *(char *) item5, vectorCount(vector_char, item5, func_compare_char));
+
+
+       print_all_details(vector_string, "vector string:", func_print_str);
+
+       printf("count,%s appears %ld times \n", *(char **) item_str1,
+              vectorCount(vector_string, item_str1, func_compare_str));
+       printf("count,%s appears %ld times \n", *(char **) item_str2,
+              vectorCount(vector_string, item_str2, func_compare_str));
+       printf("count,%s appears %ld times \n", *(char **) item_str5,
+              vectorCount(vector_string, item_str5, func_compare_str));
+
+
+       print_all_details(vector_int, "vector string:", func_print_int);
+
+       printf("count,%d appears %ld times \n", *(int*) item_int1,
+              vectorCount(vector_int, item_int1, func_compare_int));
+       printf("count,%d appears %ld times \n", *(int *) item_int2,
+              vectorCount(vector_int, item_int2, func_compare_int));
+       printf("count,%d appears %ld times \n", *(int *) item_int5,
+              vectorCount(vector_int, item_int5, func_compare_int));
+
+
+    vectorDestroy(&vector_char);
+    vectorDestroy(&vector_string);
+    vectorDestroy(&vector_int);
 
 }
- */
 
 void test_GetElement() {
 
     Vector *vector = vectorCreate(3);
     char v1 = 'a', v2 = 'b', v3 = 'c', v4 = 'd';
-    Func func = &print_char;
+/*char *v1 = "aaa", *v2 = "bbb", *v3 = "ccc", *v4 = "ddd";*/
+    FuncPrint func = &print_char;
+
+/* Func func = &print_string;  */
     void *item1 = &v1, *item2 = &v2, *item3 = &v3, *item4 = &v4;
     void *res;
 
@@ -163,7 +221,7 @@ void test_GetElement() {
 void test_SetElement() {
     Vector *vector = vectorCreate(3);
     char v1 = 'a', v2 = 'b', v3 = 'c', v4 = 'd';
-    Func func = &print_char;
+    FuncPrint func = &print_char;
     void *item1 = &v1, *item2 = &v2, *item3 = &v3, *item4 = &v4;
 
 
@@ -190,7 +248,7 @@ void test_SetElement() {
 void test_Remove() {
     Vector *vector = vectorCreate(3);
     char v1 = 'a', v2 = 'b', v3 = 'c';
-    Func func = &print_char;
+    FuncPrint func = &print_char;
     void *item1 = &v1, *item2 = &v2, *item3 = &v3;
     void *res = NULL;
 
@@ -230,7 +288,7 @@ void test_Remove() {
 void test_Pop() {
     Vector *vector = vectorCreate(3);
     char v1 = 'a', v2 = 'b', v3 = 'c';
-    Func func = &print_char;
+    FuncPrint func = &print_char;
     void *item1 = &v1, *item2 = &v2, *item3 = &v3;
     void *res;
 
@@ -264,7 +322,4 @@ void test_Pop() {
     vectorDestroy(&vector);
 }
 
-void test_ErrorCode() {
-    printf("\n***********  test ErrorCode  ***********\n");
 
-}

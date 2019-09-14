@@ -12,5 +12,5 @@ void test_GetElement();
 void test_SetElement();
 void test_Remove();
 void test_Pop();
-void test_ErrorCode();
+
 #endif /*C_GENERIC_VECTOR_SHOAMCO_TEST_GENERIC_VECTOR_H*/

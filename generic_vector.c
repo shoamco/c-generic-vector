@@ -198,19 +198,33 @@ size_t vectorGetCapacity(const Vector *vector) {
 
 
 /* Counts how many instances of a given value there are. */
-size_t vectorCount(const Vector *vector, void *value) {/*todo:type*/
+size_t vectorCount(const Vector *vector, void *value,FuncCompare func) {
     int i = 0;
     size_t count = 0;
 
 
     for (; i < vector->m_number_items; ++i) {
-        count += (vector->m_array_items[i]) == value;
+      /*  count += (vector->m_array_items[i]) == value;*/
+        count +=(size_t) func(vector->m_array_items[i],value);
     }
 
     return count;
 }
+int compare_float( void *value1, void *value2){
+    return *(float *) value1 ==*(float *) value2 ? 1:0;
+}
+int compare_char( void *value1, void *value2){
+    return *(char *) value1 ==*(char *) value2 ? 1:0;
+}
 
-void vectorPrint(Vector *vector, Func func) {
+int compare_int(void *value1, void *value2){
+    return *(int *) value1 ==*(int *) value2 ? 1:0;
+}
+int compare_string(void *value1, void *value2){
+    return strcmp(*(char**) value1,*(char**) value2) ? 1:0;
+}
+
+void vectorPrint(Vector *vector, FuncPrint func) {
     func(vector);
 
 
@@ -234,5 +248,11 @@ void print_float(Vector *vector) {
     int i = 0;
     for (; i < vector->m_number_items; ++i)
         printf("%f ", *(float *) vector->m_array_items[i]);
+    printf("\n");
+}
+void print_string(Vector *vector) {
+    int i = 0;
+    for (; i < vector->m_number_items; ++i)
+        printf("%s ", *(char **) vector->m_array_items[i]);
     printf("\n");
 }

@@ -17,6 +17,7 @@ int main() {
     test_SetElement();
     test_Remove();
     test_Pop();
+    test_Count();
 /*    test_insert();*/
     /* test_Pop();*/
     /* test_Remove();*/
