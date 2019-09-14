@@ -24,19 +24,7 @@ typedef enum
     E_ALLOCATION_ERROR,
     E_BAD_INDEX
 } ErrorCode;
-/*typedef enum
-{
-  CHAR,
-  UNSIGNED_CHAR,
-  SIGNED_CHAR,
-  INT,
-  UNSIGNED_INT,
-  SHORT,
-  UNSIGNED_SHORT,
-  LONG,
-  UNSIGNED_LONG
 
-} TypeItem;*/
 void  shift(Vector *vector,size_t index, Direction direction);
 void resize_vector_by2(Vector *vec);
 
@@ -65,17 +53,17 @@ void shift_left(Vector *vector, size_t index);
 void shift_right(Vector *vector, size_t index);
 /* Counts how many instances of a given value there are. */
 size_t vectorCount(const Vector *vector, void *value , FuncCompare func);
-void vectorPrint( Vector *vector, FuncPrint func);
-void print_float( Vector *vector);
-void print_char( Vector *vector);
-void print_int( Vector *vector);
-void print_string( Vector *vector);
+void vectorPrint(const Vector *vector, FuncPrint func);
+void print_float(const Vector *vector);
+void print_char(const Vector *vector);
+void print_int(const Vector *vector);
+void print_string(const Vector *vector);
 
-int compare_float( void *value1, void *value2);
-int compare_char(void *value1, void *value2);
-int compare_int(void *value1, void *value2);
-int compare_string(void *value1, void *value2);
+int compare_float(const void *value1,const void *value2);
+int compare_char(const void *value1,const  void *value2);
+int compare_int(const void *value1,const  void *value2);
+int compare_string(const void *value1, const void *value2);
 #ifdef _DEBUG
-void vectorPrint( Vector *vector, Func func);
+void vectorPrint(const Vector *vector, FuncPrint func);
 #endif /* _DEBUG */
 #endif /*C_GENERIC_VECTOR_SHOAMCO_GENERIC_VECTOR_H*/

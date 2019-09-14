@@ -210,47 +210,47 @@ size_t vectorCount(const Vector *vector, void *value,FuncCompare func) {
 
     return count;
 }
-int compare_float( void *value1, void *value2){
+int compare_float(const void *value1,const void *value2){
     return *(float *) value1 ==*(float *) value2 ? 1:0;
 }
-int compare_char( void *value1, void *value2){
+int compare_char(const void *value1,const void *value2){
     return *(char *) value1 ==*(char *) value2 ? 1:0;
 }
 
-int compare_int(void *value1, void *value2){
+int compare_int(const void *value1,const void *value2){
     return *(int *) value1 ==*(int *) value2 ? 1:0;
 }
-int compare_string(void *value1, void *value2){
+int compare_string(const void *value1,const  void *value2){
     return strcmp(*(char**) value1,*(char**) value2) ? 1:0;
 }
 
-void vectorPrint(Vector *vector, FuncPrint func) {
+void vectorPrint(const Vector *vector, FuncPrint func) {
     func(vector);
 
 
 }
 
-void print_int(Vector *vector) {
+void print_int(const Vector *vector) {
     int i = 0;
     for (; i < vector->m_number_items; ++i)
         printf("%d ", *(int *) vector->m_array_items[i]);
     printf("\n");
 }
 
-void print_char(Vector *vector) {
+void print_char(const Vector *vector) {
     int i = 0;
     for (; i < vector->m_number_items; ++i)
         printf("%c ", *(char *) vector->m_array_items[i]);
     printf("\n");
 }
 
-void print_float(Vector *vector) {
+void print_float(const Vector *vector) {
     int i = 0;
     for (; i < vector->m_number_items; ++i)
         printf("%f ", *(float *) vector->m_array_items[i]);
     printf("\n");
 }
-void print_string(Vector *vector) {
+void print_string(const Vector *vector) {
     int i = 0;
     for (; i < vector->m_number_items; ++i)
         printf("%s ", *(char **) vector->m_array_items[i]);
