@@ -53,6 +53,7 @@ void shift_left(Vector *vector, size_t index);
 void shift_right(Vector *vector, size_t index);
 /* Counts how many instances of a given value there are. */
 size_t vectorCount(const Vector *vector, void *value , FuncCompare func);
+/*todo:move the function to a new file of user*/
 void vectorPrint(const Vector *vector, FuncPrint func);
 void print_float(const Vector *vector);
 void print_char(const Vector *vector);

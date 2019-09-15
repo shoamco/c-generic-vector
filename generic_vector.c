@@ -18,7 +18,7 @@ Vector *vectorCreate(size_t size) {
 
         assert(d_vector->m_array_items);
         /* if (!d_vector->m_array_items) {*/
-        if (!d_vector->m_array_items ) {
+        if (!d_vector->m_array_items) {
 
             free(d_vector);/*if allocation fall -free vector */
             d_vector = NULL;/*return null for the use*/
@@ -97,10 +97,9 @@ ErrorCode vectorInsert(Vector *vector, void *value, size_t index) {
 
     if (index > vector->m_number_items)
         val_error = E_BAD_INDEX;
-    else if (index == (vector->m_number_items)-1) {
-        vectorPush(vector, value);
-    }
-    else {
+    else if (index == (vector->m_number_items) - 1) {
+        val_error = vectorPush(vector, value);
+    } else {
 
         if (vector->m_number_items >= vector->m_capacity) {
             resize_vector_by2(vector);
@@ -198,30 +197,32 @@ size_t vectorGetCapacity(const Vector *vector) {
 
 
 /* Counts how many instances of a given value there are. */
-size_t vectorCount(const Vector *vector, void *value,FuncCompare func) {
+size_t vectorCount(const Vector *vector, void *value, FuncCompare func) {
     int i = 0;
     size_t count = 0;
 
 
     for (; i < vector->m_number_items; ++i) {
-      /*  count += (vector->m_array_items[i]) == value;*/
-        count +=(size_t) func(vector->m_array_items[i],value);
+        count += (size_t) func(vector->m_array_items[i], value);
     }
 
     return count;
 }
-int compare_float(const void *value1,const void *value2){
-    return *(float *) value1 ==*(float *) value2 ? 1:0;
-}
-int compare_char(const void *value1,const void *value2){
-    return *(char *) value1 ==*(char *) value2 ? 1:0;
+
+int compare_float(const void *value1, const void *value2) {
+    return *(float *) value1 == *(float *) value2 ? 1 : 0;
 }
 
-int compare_int(const void *value1,const void *value2){
-    return *(int *) value1 ==*(int *) value2 ? 1:0;
+int compare_char(const void *value1, const void *value2) {
+    return *(char *) value1 == *(char *) value2 ? 1 : 0;
 }
-int compare_string(const void *value1,const  void *value2){
-    return strcmp(*(char**) value1,*(char**) value2) ? 1:0;
+
+int compare_int(const void *value1, const void *value2) {
+    return *(int *) value1 == *(int *) value2 ? 1 : 0;
+}
+
+int compare_string(const void *value1, const void *value2) {
+    return strcmp(*(char **) value1, *(char **) value2) ? 1 : 0;
 }
 
 void vectorPrint(const Vector *vector, FuncPrint func) {
@@ -250,6 +251,7 @@ void print_float(const Vector *vector) {
         printf("%f ", *(float *) vector->m_array_items[i]);
     printf("\n");
 }
+
 void print_string(const Vector *vector) {
     int i = 0;
     for (; i < vector->m_number_items; ++i)
